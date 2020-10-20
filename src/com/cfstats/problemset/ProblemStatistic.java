@@ -27,4 +27,7 @@ public class ProblemStatistic {
         return new ToStringBuilder(this).append("contestId", contestId).append("index", index).append("solvedCount", solvedCount).toString();
     }
 
+    public String getUniqueName() {
+        return contestId + index;
+    }
 }

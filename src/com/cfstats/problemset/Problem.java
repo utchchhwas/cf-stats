@@ -2,6 +2,8 @@
 package com.cfstats.problemset;
 
 import java.util.List;
+import java.util.Objects;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,6 +11,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 // Represents a problem.
 public class Problem {
+
+    enum TYPE {
+        PROGRAMMING,
+        QUESTION
+    }
 
     @SerializedName("contestId")
     @Expose
@@ -24,11 +31,11 @@ public class Problem {
 
     @SerializedName("type")
     @Expose
-    public String type; // Enum: PROGRAMMING, QUESTION.
+    public TYPE type; // Enum: PROGRAMMING, QUESTION.
 
     @SerializedName("rating")
     @Expose
-    public Long rating; // Integer. Can be absent. Problem rating (difficulty).
+    public long rating; // Integer. Can be absent. Problem rating (difficulty).
 
     @SerializedName("tags")
     @Expose
@@ -38,14 +45,55 @@ public class Problem {
     @Expose
     public Double points; // Floating point number. Can be absent. Maximum ammount of points for the problem.
 
+
 //    @SerializedName("problemsetName")
 //    @Expose
 //    public String problemsetName; // String. Can be absent. Short name of the problemset the problem belongs to.
 
+    public Long solvedCount; // Integer. Number of users, who solved the problem.
+
+    public Long getRating() {
+        return rating;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public Long getSolvedCount() {
+        return solvedCount;
+    }
+
+    public String getUniqueName() {
+        return contestId + index;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Problem problem = (Problem) obj;
+        return Objects.equals(contestId, problem.contestId) &&
+                index.equals(problem.index) &&
+                name.equals(problem.name);
+//        return getUniqueName().equals(problem.getUniqueName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(contestId, index);
+    }
+
     @Override
     public String toString() {
         ToStringBuilder.setDefaultStyle(ToStringStyle.MULTI_LINE_STYLE);
-        return new ToStringBuilder(this).append("contestId", contestId).append("index", index).append("name", name).append("type", type).append("rating", rating).append("tags", tags).append("points", points).toString();
+        return new ToStringBuilder(this).append("contestId", contestId).append("index", index).append("name", name).append("type", type).append("rating", rating).append("tags", tags).append("points", points).append("solvedCount", solvedCount).toString();
+
+//        return contestId + index + "\n";
     }
 
 }
