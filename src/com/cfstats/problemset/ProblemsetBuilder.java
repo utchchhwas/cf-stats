@@ -1,43 +1,43 @@
 package com.cfstats.problemset;
 
 import com.google.gson.Gson;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+// Class for building a problemset
 public class ProblemsetBuilder {
 
-    public List<Problem> problemList;
-    public Map<String, Problem> problemMap;
+    private List<Problem> problemList;
 
-    public ProblemsetBuilder() throws URISyntaxException, IOException, InterruptedException {
+    public ProblemsetBuilder() throws InterruptedException, IOException, URISyntaxException {
+        problemList = null;
+        fetchData();
+    }
+
+    private void fetchData() throws URISyntaxException, IOException, InterruptedException {
+        System.out.println("Fetching data from Codeforces server...");
+
         HttpClient httpClient = HttpClient.newHttpClient();
-        HttpRequest httpRequest = HttpRequest.newBuilder(new URI("https://codeforces.com/api/problemset.problems?tags=2-sat")).build();
+        HttpRequest httpRequest = HttpRequest.newBuilder(new URI("https://codeforces.com/api/problemset.problems")).build();
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("Status Code: " + httpResponse.statusCode());
+//        System.out.println("Status Code: " + httpResponse.statusCode());
+        if (httpResponse.statusCode() == 200) {
+            System.out.println("Successfully fetched data.");
+        }
 
         ProblemsetResult problemsetResult = (new Gson()).fromJson(httpResponse.body(), ProblemsetResult.class);
         problemList = problemsetResult.result.problems;
         getSolvedCount(problemsetResult.result.problemStatistics);
-        createProblemMap();
     }
 
     private void getSolvedCount(List<ProblemStatistic> problemStatisticList) {
-        if (problemList.size() != problemStatisticList.size()) {
-            System.out.println("Size don't match\n");
-        }
-
         for (int i = 0; i < problemList.size(); i++) {
             if (problemList.get(i).getUniqueName().equals(problemStatisticList.get(i).getUniqueName())) {
                 problemList.get(i).solvedCount = problemStatisticList.get(i).solvedCount;
@@ -45,37 +45,80 @@ public class ProblemsetBuilder {
         }
     }
 
-    private void createProblemMap() {
-        problemMap = new HashMap<String, Problem>();
-        for (Problem problem : problemList) {
-            problemMap.put(problem.getUniqueName(), problem);
-        }
-    }
-
-    public int getProblemsetSize() {
-        System.out.println("Total problems: " + problemList.size());
-        return problemList.size();
-    }
-
-    public void sortProblemListByRating() {
+    public void sortProblemsetByRating() {
         problemList.sort(new CompareProblemsByRating());
     }
 
-    public void writeProblemsetToFile() throws IOException {
-        try (FileWriter writer = new FileWriter("problemset.txt")) {
-            for (Problem pb : problemList) {
-                writer.append(pb.toString());
-            }
-        }
+
+    // Returns the complete problemset in default order
+    public Problemset getProblemset() {
+        return  new Problemset(new ArrayList<>(problemList));
     }
 
-    public void writeProblemsetToFileAsCSV() throws IOException {
-        try (CSVPrinter printer = new CSVPrinter(new FileWriter("problemset.csv"), CSVFormat.DEFAULT)) {
-            printer.printRecord("#", "name", "rating", "solvedCount");
-            for (Problem pb : problemList) {
-                printer.printRecord(pb.getUniqueName(), pb.getName(), pb.getRating(), pb.getSolvedCount());
+    // Returns a problemset with the given rating
+    public Problemset getProblemsetByRating(int rating) {
+        ArrayList<Problem> list = new ArrayList<>();
+        for (var pb : problemList) {
+            if (pb.getRating() == rating) {
+                list.add(pb);
             }
         }
+
+        return  new Problemset(list);
+    }
+
+    // Returns a problemset with the given rating range
+    public Problemset getProblemsetByRating(int lowRating, int highRating) {
+        List<Problem> list = new ArrayList<>();
+        for (var pb : problemList) {
+            if (pb.getRating() >= lowRating && pb.getRating() <= highRating) {
+                list.add(pb);
+            }
+        }
+        list.sort(new CompareProblemsByRating());
+
+        return new Problemset(list);
+    }
+
+
+    public Problemset getProblemsetByTag(Tags tag) {
+        List<Problem> list = new ArrayList<>();
+        for (var pb : problemList) {
+            if (pb.getTags().contains(tag)) {
+                list.add(pb);
+            }
+        }
+
+        return new Problemset(list);
+    }
+
+    public Problemset getProblemsetByTagsAND(Tags[] tags) {
+        List<Problem> list = new ArrayList<>();
+        for (var pb : problemList) {
+            if (pb.getTags().containsAll(Arrays.asList(tags))) {
+                list.add(pb);
+            }
+        }
+
+        return new Problemset(list);
+    }
+
+    public Problemset getProblemsetByTagsOR(Tags[] tags) {
+        List<Problem> list = new ArrayList<>();
+        for (var pb : problemList) {
+            boolean contains = false;
+            for (var tag : tags) {
+                if (pb.getTags().contains(tag)) {
+                    contains = true;
+                    break;
+                }
+            }
+            if (contains) {
+                list.add(pb);
+            }
+        }
+
+        return new Problemset(list);
     }
 
 }

@@ -19,7 +19,7 @@ public class ProblemStatistic {
 
     @SerializedName("solvedCount")
     @Expose
-    public Long solvedCount; // Integer. Number of users, who solved the problem.
+    public int solvedCount; // Integer. Number of users, who solved the problem.
 
     @Override
     public String toString() {

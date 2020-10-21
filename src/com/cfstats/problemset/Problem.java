@@ -1,6 +1,8 @@
 
 package com.cfstats.problemset;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,24 +37,28 @@ public class Problem {
 
     @SerializedName("rating")
     @Expose
-    public long rating; // Integer. Can be absent. Problem rating (difficulty).
+    public int rating; // Integer. Can be absent. Problem rating (difficulty).
 
     @SerializedName("tags")
     @Expose
-    public List<String> tags = null; // 	String list. Problem tags.
+    public List<Tags> tags = null; // 	String list. Problem tags.
 
     @SerializedName("points")
     @Expose
     public Double points; // Floating point number. Can be absent. Maximum ammount of points for the problem.
 
+    public int solvedCount; // Integer. Number of users, who solved the problem.
+
+    public List<Tags> getTags() {
+        return tags;
+    }
 
 //    @SerializedName("problemsetName")
 //    @Expose
 //    public String problemsetName; // String. Can be absent. Short name of the problemset the problem belongs to.
 
-    public Long solvedCount; // Integer. Number of users, who solved the problem.
 
-    public Long getRating() {
+    public int getRating() {
         return rating;
     }
 
@@ -60,16 +66,17 @@ public class Problem {
         return name;
     }
 
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public Long getSolvedCount() {
+    public int getSolvedCount() {
         return solvedCount;
     }
 
     public String getUniqueName() {
         return contestId + index;
+    }
+
+    // Returns an URL object containing the link to the problem
+    public URL getLink() throws MalformedURLException {
+        return new URL("https://codeforces.com/problemset/problem/" + contestId + "/" + index);
     }
 
     @Override
