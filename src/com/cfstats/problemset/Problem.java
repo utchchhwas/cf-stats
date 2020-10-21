@@ -27,6 +27,10 @@ public class Problem {
     @Expose
     public String index; // String. Usually a letter of a letter, followed by a digit, that represent a problem index in a contest.
 
+    public String getIndex() {
+        return index;
+    }
+
     @SerializedName("name")
     @Expose
     public String name; // String. Localized.

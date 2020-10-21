@@ -1,7 +1,7 @@
 package com.cfstats;
 
 
-import com.cfstats.user.UserResult;
+import com.cfstats.user.UserInfoResult;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -28,9 +28,9 @@ public class Main {
         System.out.println("Body: " + httpResponse.body());
 
         Gson gson = new Gson();
-        UserResult userResult = gson.fromJson(httpResponse.body(), UserResult.class);
+        UserInfoResult userInfoResult = gson.fromJson(httpResponse.body(), UserInfoResult.class);
 
-        System.out.println(userResult);
+        System.out.println(userInfoResult);
 
         scanner.close();
     }

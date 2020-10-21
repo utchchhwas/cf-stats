@@ -10,18 +10,20 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 // Returns submissions of specified user.
 public class UserStatusResult {
 
+    // Status code returned by the API
     @SerializedName("status")
     @Expose
     public String status;
 
+    // Result object
     @SerializedName("result")
     @Expose
-    public List<Result> result = null;
+    public List<RawUserSubmission> rawUserSubmissionList = null;
 
     @Override
     public String toString() {
         ToStringBuilder.setDefaultStyle(ToStringStyle.MULTI_LINE_STYLE);
-        return new ToStringBuilder(this).append("status", status).append("result", result).toString();
+        return new ToStringBuilder(this).append("status", status).append("result", rawUserSubmissionList).toString();
     }
 
 }

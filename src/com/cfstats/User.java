@@ -31,6 +31,10 @@ public class User {
     // String email;
 
 
+    public String getHandle() {
+        return handle;
+    }
+
     public User(JSONObject jsonObject) {
         this.handle = (String) jsonObject.get("handle");
         this.firstName = (String) jsonObject.get("firstName");

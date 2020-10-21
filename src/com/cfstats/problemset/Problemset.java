@@ -79,6 +79,7 @@ public class Problemset {
     public Problem getProblem(String uniqueName) {
         if (!contains(uniqueName)) {
             System.out.println("No such problem: " + uniqueName);
+            return null;
         }
         return problemMap.get(uniqueName);
     }
