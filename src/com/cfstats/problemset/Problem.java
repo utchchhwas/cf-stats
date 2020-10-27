@@ -51,6 +51,9 @@ public class Problem {
     @Expose
     public Double points; // Floating point number. Can be absent. Maximum ammount of points for the problem.
 
+
+    public boolean solved = false;
+
     public int solvedCount; // Integer. Number of users, who solved the problem.
 
     public List<Tags> getTags() {
@@ -102,9 +105,12 @@ public class Problem {
     @Override
     public String toString() {
         ToStringBuilder.setDefaultStyle(ToStringStyle.MULTI_LINE_STYLE);
-        return new ToStringBuilder(this).append("contestId", contestId).append("index", index).append("name", name).append("type", type).append("rating", rating).append("tags", tags).append("points", points).append("solvedCount", solvedCount).toString();
+        return new ToStringBuilder(this).append("contestId", contestId).append("index", index).append("name", name).append("type", type).append("rating", rating).append("tags", tags).append("points", points).append("solvedCount", solvedCount).append("solved", solved).toString();
 
 //        return contestId + index + "\n";
     }
 
+    public void setSolved(boolean solved) {
+        this.solved = solved;
+    }
 }

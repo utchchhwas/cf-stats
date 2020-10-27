@@ -26,6 +26,10 @@ public class Problemset {
         }
     }
 
+    public Map<String, Problem> getProblemMap() {
+        return problemMap;
+    }
+
     public int getProblemsetSize() {
         System.out.println("Total problems: " + problemList.size());
         return problemList.size();
@@ -42,9 +46,9 @@ public class Problemset {
     public void writeProblemsetToFileAsCSV(String fileName) throws IOException {
 //        String fileName = "problemset.csv";
         try (CSVPrinter printer = new CSVPrinter(new FileWriter(fileName), CSVFormat.DEFAULT)) {
-            printer.printRecord("#", "name", "rating", "solvedCount");
+            printer.printRecord("#", "name", "rating", "solvedCount", "tags", "solved");
             for (Problem pb : problemList) {
-                printer.printRecord(pb.getUniqueName(), pb.getName(), pb.getRating(), pb.getSolvedCount(), pb.tags);
+                printer.printRecord(pb.getUniqueName(), pb.getName(), pb.getRating(), pb.getSolvedCount(), pb.tags, pb.solved);
             }
         }
         System.out.println("Wrote to " + fileName);

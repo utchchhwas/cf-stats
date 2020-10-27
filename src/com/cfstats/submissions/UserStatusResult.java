@@ -18,12 +18,12 @@ public class UserStatusResult {
     // Result object
     @SerializedName("result")
     @Expose
-    public List<RawUserSubmission> rawUserSubmissionList = null;
+    public List<Submission> submissionList = null;
 
     @Override
     public String toString() {
         ToStringBuilder.setDefaultStyle(ToStringStyle.MULTI_LINE_STYLE);
-        return new ToStringBuilder(this).append("status", status).append("result", rawUserSubmissionList).toString();
+        return new ToStringBuilder(this).append("status", status).append("result", submissionList).toString();
     }
 
 }

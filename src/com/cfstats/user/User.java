@@ -106,7 +106,7 @@ public class User {
         return new ToStringBuilder(this).append("lastName", lastName).append("country", country).append("lastOnlineTimeSeconds", lastOnlineTimeSeconds).append("city", city).append("rating", rating).append("friendOfCount", friendOfCount).append("titlePhoto", titlePhoto).append("handle", handle).append("avatar", avatar).append("firstName", firstName).append("contribution", contribution).append("organization", organization).append("rank", rank).append("maxRating", maxRating).append("registrationTimeSeconds", registrationTimeSeconds).append("maxRank", maxRank).toString();
     }
 
-    public static User getUser(String handle) throws IOException, InterruptedException, URISyntaxException {
+    public static User createUser(String handle) throws IOException, InterruptedException, URISyntaxException {
         System.out.println("Fetching data from Codeforces server...");
 
         HttpClient httpClient = HttpClient.newHttpClient();

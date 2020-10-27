@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException, IOException, URISyntaxException {
-        User user = User.getUser("utchchhwas");
+        User user = User.createUser("utchchhwas");
         System.out.println(user);
     }
 }
